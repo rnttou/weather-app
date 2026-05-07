@@ -8,21 +8,40 @@ button.addEventListener("click", async () => {
     `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
   try {
+    // 👉 show loading
+    document.getElementById("loading").classList.remove("hidden");
+
     const response = await fetch(url);
     const data = await response.json();
 
-    document.getElementById("weatherResult").innerHTML = `
-      <h2>${data.name}</h2>
-      <p>🌡 ${data.main.temp} °C</p>
-      <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png">
+    // 👉 hide loading
+    document.getElementById("loading").classList.add("hidden");
 
-<p>${data.weather[0].description}</p>
-      <p>💨 Wind: ${data.wind.speed} km/h</p>
+    document.getElementById("weatherResult").innerHTML = `
+      <div class="card">
+        <h2>${data.name}</h2>
+
+        <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png">
+
+        <h3>${data.main.temp}°C</h3>
+
+        <p>${data.weather[0].description}</p>
+
+        <p>Feels like: ${data.main.feels_like}°C</p>
+        <p>Humidity: ${data.main.humidity}%</p>
+        <p>Wind: ${data.wind.speed} km/h</p>
+      </div>
     `;
+
   } catch (error) {
+
+    document.getElementById("loading").classList.add("hidden");
+
     document.getElementById("weatherResult").innerHTML =
-      "Error fetching weather.";
+      "Something went wrong ❌";
+
   }
+
 });
 
 input.addEventListener("keypress", (event) => {
